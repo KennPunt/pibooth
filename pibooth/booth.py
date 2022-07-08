@@ -28,7 +28,7 @@ from pibooth.plugins import create_plugin_manager
 from pibooth.view import PiWindow
 from pibooth.config import PiConfigParser, PiConfigMenu
 from pibooth.printer import PRINTER_TASKS_UPDATED, Printer
-
+import pibooth.licensemanager as lisencemanager
 
 # Set the default pin factory to a mock factory if pibooth is not started a Raspberry Pi
 try:
@@ -455,7 +455,11 @@ def main():
 
     plugin_manager = create_plugin_manager()
 
-    # Load the configuration
+    # Load the configuration 
+    
+    ### TODO call lisencemanager.checkEvents()
+    ### create pibooth.cfg file from event
+    
     config = PiConfigParser(osp.join(options.config_directory, "pibooth.cfg"), plugin_manager, not options.reset)
 
     # Register plugins
