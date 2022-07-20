@@ -73,7 +73,7 @@ def getEvents():
         print("saving credentials")
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
-    print("Trying to call the Calendar API")
+    print("Trying to call the Calendar API for %s", getUUID())
     try:
         service = build('calendar', 'v3', credentials=creds)
 
