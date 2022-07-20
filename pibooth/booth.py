@@ -12,7 +12,7 @@ import logging
 import argparse
 import multiprocessing
 from warnings import filterwarnings
-from pibooth.pibooth import licensemanager
+from pibooth import licensemanager
 
 import pygame
 from gpiozero import Device, ButtonBoard, LEDBoard, pi_info
