@@ -56,19 +56,24 @@ def getEvents():
     # created automatically when the authorization flow completes for the first
     # time.
     if os.path.exists('token.json'):
+        print("token.json found")
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
+        print("no valid creds")
         if creds and creds.expired and creds.refresh_token:
+            print("refreshing creds")
             creds.refresh(Request())
         else:
+            print("client secrets file")
             flow = InstalledAppFlow.from_client_secrets_file(
                 'credentials.json', SCOPES)
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
+        print("saving credentials")
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
-
+    print("Trying to call the Calendar API")
     try:
         service = build('calendar', 'v3', credentials=creds)
 
