@@ -460,8 +460,12 @@ def main():
     ### TODO TEST
     try:
         license = licensemanager.checkEvents()
+        LOGGER.log(license)
         if(license):
-            config = PiConfigParser(license, plugin_manager, not options.reset)
+            temp_config = open("/tmp/pinturalicense.cfg", "w")
+            temp_config.write(license)
+            temp_config.close()
+            config = PiConfigParser("/tmp/pinturalicense.cfg", plugin_manager, not options.reset)
         else:
             config = PiConfigParser(osp.join(options.config_directory, "pibooth.cfg"), plugin_manager, not options.reset)
     except:
