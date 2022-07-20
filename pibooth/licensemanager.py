@@ -7,6 +7,7 @@
 """
 
 from __future__ import print_function
+import configparser
 
 import os.path
 
@@ -45,7 +46,8 @@ def getUUID():
     #print(mac)
     #print(hex(mac))
     macString = ':'.join(("%012X" % mac)[i:i+2] for i in range(0, 12, 2))
-    print('[' + macString + ']')
+    uuid = '[' + macString + ']'
+    return uuid
 
 def getEvents(): 
     creds = None
@@ -73,8 +75,8 @@ def getEvents():
         now = datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
         print('Getting the upcoming event')
         events_result = service.events().list(calendarId='primary', timeMin=now,
-                                              maxResults=1, singleEvents=True,
-                                              orderBy='startTime').execute()
+                                              maxResults=10, singleEvents=True,
+                                              orderBy='startTime', q=getUUID()).execute()
         events = events_result.get('items', [])
 
         if not events:
@@ -89,22 +91,28 @@ def getEvents():
 def checkEvents():
     config = ""
     events = getEvents()   
-    # Prints the start and name of the next 10 events
-    for event in events:
-        start = event['start'].get('dateTime', event['start'].get('date'))
-        print(start, event['summary'])
-        #print(event['description'])
-        if (isDatetimeInRange(start)):
-            config = event['description']
-            break
+    if(events):
+        for event in events:
+            start = event['start'].get('dateTime', event['start'].get('date'))
+            print(start, event['summary'])
+            if (isDatetimeInRange(start)):
+                config = event['description']
+                break
     
     #### TODO Check the config file for the UUID
+    
+    #configparser.ConfigParser()
+    #config.read(config)
+    #print(config.get('UUID'))
+    
     if(config):
         print(config)
+        return config
     else:
         print("No event found within 24 hours")
+        return False
             
-    getUUID()
+    #print(getUUID())
     ####
         
 if __name__ == '__main__':

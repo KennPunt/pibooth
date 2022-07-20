@@ -12,6 +12,7 @@ import logging
 import argparse
 import multiprocessing
 from warnings import filterwarnings
+from pibooth.pibooth import licensemanager
 
 import pygame
 from gpiozero import Device, ButtonBoard, LEDBoard, pi_info
@@ -28,7 +29,6 @@ from pibooth.plugins import create_plugin_manager
 from pibooth.view import PiWindow
 from pibooth.config import PiConfigParser, PiConfigMenu
 from pibooth.printer import PRINTER_TASKS_UPDATED, Printer
-import pibooth.licensemanager as lisencemanager
 
 # Set the default pin factory to a mock factory if pibooth is not started a Raspberry Pi
 try:
@@ -457,11 +457,18 @@ def main():
 
     # Load the configuration 
     
-    ### TODO call lisencemanager.checkEvents()
-    ### create pibooth.cfg file from event
-    
-    config = PiConfigParser(osp.join(options.config_directory, "pibooth.cfg"), plugin_manager, not options.reset)
+    ### TODO TEST
+    try:
+        license = licensemanager.checkEvents()
+        if(license):
+            config = PiConfigParser(license, plugin_manager, not options.reset)
+        else:
+            config = PiConfigParser(osp.join(options.config_directory, "pibooth.cfg"), plugin_manager, not options.reset)
+    except:
+        print("License error")
+        config = PiConfigParser(osp.join(options.config_directory, "pibooth.cfg"), plugin_manager, not options.reset)
 
+        
     # Register plugins
     plugin_manager.load_all_plugins(config.gettuple('GENERAL', 'plugins', 'path'),
                                     config.gettuple('GENERAL', 'plugins_disabled', str))

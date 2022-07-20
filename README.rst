@@ -1,3 +1,6 @@
+TGB852!!
+https://github.com/pibooth/pibooth-google-photo
+
 |Pibooth|
 
 |PythonVersions| |PypiPackage| |Downloads|
