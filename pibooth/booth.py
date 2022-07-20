@@ -460,7 +460,7 @@ def main():
     ### TODO TEST
     try:
         license = licensemanager.checkEvents()
-        LOGGER.log(license)
+        print(license)
         if(license):
             temp_config = open("/tmp/pinturalicense.cfg", "w")
             temp_config.write(license)
