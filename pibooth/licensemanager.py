@@ -8,7 +8,7 @@
 
 from __future__ import print_function
 import configparser
-
+import os
 import os.path
 
 from google.auth.transport.requests import Request
@@ -66,6 +66,7 @@ def getEvents():
             creds.refresh(Request())
         else:
             print("client secrets file")
+            os.environ['BROWSER'] = 'chromium-browser'
             flow = InstalledAppFlow.from_client_secrets_file(
                 'credentials.json', SCOPES)
             creds = flow.run_local_server(port=0)
